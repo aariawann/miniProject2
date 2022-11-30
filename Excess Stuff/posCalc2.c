@@ -4,13 +4,12 @@
 #include <ctype.h>
 #include <math.h>
 
-//declare global variables
 static int numOfUsers;
 static FILE* inFile;
 static char line[1000];
 
 /**
- * user structure
+ * user_t structure
 */
 typedef struct
 {
@@ -42,7 +41,11 @@ typedef struct
 } UserDistance;
 
 
+
+
 User scan_user(User userStruc){
+
+    //char line[1000];
     
     //fill user structure
     for (int j = 0; j < 5; j++)
@@ -51,24 +54,19 @@ User scan_user(User userStruc){
 
             switch(j){
 
-                //fill name
                 case 0:
                     line[strlen(line) - 1] = '\0';
                     strcpy(userStruc.name,line);
                     break;
-                //fill time
                 case 1:
                     userStruc.time = atof(line);
                     break;
-                //fill lat
                 case 2:
                     userStruc.lat = atof(line);
                     break;
-                //fill lng
                 case 3:
                     userStruc.lng = atof(line);
                     break;
-                //fill alt
                 case 4:
                     userStruc.alt = atof(line);
                     break;
@@ -113,7 +111,8 @@ void swapIndex(UserDistance *x, UserDistance *y, User *x2, User *y2){
 }
 
 void sortArray(UserDistance distanceArray[], User other_users[], int n){
- 
+
+    
     if(n == 1)
         return;
     
@@ -133,6 +132,7 @@ void sortArray(UserDistance distanceArray[], User other_users[], int n){
     
     sortArray(distanceArray, other_users, n-1);
 
+
 }
 
 
@@ -146,6 +146,7 @@ int main(){
     inFile = fopen(fileName, "r");
     User our_user;
     int numOfUsers;
+    //char line[1000];
 
     if(inFile==NULL){
         perror("Unable to open file");
@@ -175,24 +176,59 @@ int main(){
     {
         distanceArray[i] = distanceCalc(other_users[i], our_user);
     }
-    
-    // printf("-----------------------------\n");
 
-    sortArray(distanceArray, other_users, numOfUsers);
+
+
+
 
     // for (int i = 0; i < numOfUsers; i++)
     // {
     //     printf("%s %f\n", distanceArray[i].name, distanceArray[i].dist);
     // }
+    
+    printf("-----------------------------\n");
 
-    // printf("-----------------------------\n");
+    sortArray(distanceArray, other_users, numOfUsers);
 
-    //print closest user name and position
+
+    for (int i = 0; i < numOfUsers; i++)
+    {
+        printf("%s %f\n", distanceArray[i].name, distanceArray[i].dist);
+    }
+
+    printf("-----------------------------\n");
+
     printf("Closest user is %s\nLatitude: %.3f\nLongitude: %.3f\nAltitude: %.3f\n", 
     other_users[0].name,
     other_users[0].lat,
     other_users[0].lng,
     other_users[0].alt);
+
+
+
+    // printf("OUR USER\n");
+    // printf("%s\n%f\n%f\n%f\n%f\n", 
+    //     our_user.name,
+    //     our_user.time,
+    //     our_user.lat,
+    //     our_user.lng,
+    //     our_user.alt);
+    
+    // printf("OTHER USERS\n");
+    // for (int i = 0; i < numOfUsers; i++)
+    // {
+    //     printf("%s\n%f\n%f\n%f\n%f\n", 
+    //     other_users[i].name,
+    //     other_users[i].time,
+    //     other_users[i].lat,
+    //     other_users[i].lng,
+    //     other_users[i].alt);
+
+    // }
+    
+
+
+    
 
     return 0;
 }
